@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  telegram:
+    build: app
+    restart: always
+    command: "/usr/local/bin/python3 /usr/src/telegram_bot.py"
+    depends_on:
+      - redis
+    environment:
+      - "TELEGRAM_TOKEN=YOUR_TELEGRAM_TOKEN"
+      - "TELEGRAM_GROUP_ID=-498665270"
+
+  discord:
+    build: app
+    restart: always
+    tty: true
+    command: "/usr/local/bin/python3 /usr/src/discord_bot.py"
+    depends_on:
+      - redis
+    environment:
+      - "DISCORD_TOKEN=YOUR_DISCORD_TOKEN"
+      - "DISCORD_CHANNEL_ID=803574636582666261"
